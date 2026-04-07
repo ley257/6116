@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ley 257/6116 CABA | Certificación de Fachadas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap');
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+        }
+
+        .section-calc {
+            min-height: auto;
+            padding-top: 5rem;
+            padding-bottom: 5rem;
+        }
+
+        .reveal-text {
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+        }
+
+        .hero-img {
+            filter: brightness(0.8);
+            transform: scale(1.1);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        #sugerencias-direcciones {
+            max-height: 200px;
+            overflow-y: auto;
+            position: absolute;
+            width: 100%;
+            z-index: 100;
+        }
+
+        .calc-step {
+            display: none;
+        }
+
+        .calc-step.active {
+            display: block;
+        }
+
+        .global-bg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+        }
+
+        .after-bg-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('images/Antiguas_fachadas_Buenos_202604071330 (1).webp');
+            background-size: cover;
+            background-position: center;
+            clip-path: polygon(0% 0%, 65% 0%, 35% 100%, 0% 100%);
+        }
+
+        .before-bg-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('images/fachada_danada.png');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .glass-section {
+            background: transparent;
+        }
+
+        .dark-glass-card {
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1.5rem;
+            color: white;
+        }
+
+        @media print {
+            @page {
+                size: A4;
+                margin: 15mm;
+            }
+            body { 
+                background: white !important; 
+                margin: 0; 
+                padding: 0; 
+            }
+            nav, section:not(#calculadora), footer, [class*="fixed"], .no-print, #step-1, .dark-glass-card, .calc-step + div {
+                display: none !important;
+            }
+            #calculadora {
+                padding: 0 !important;
+                margin: 0 !important;
+                min-height: auto !important;
+                background: white !important;
+            }
+            .glass-card {
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                background: white !important;
+                overflow: visible !important;
+            }
+            #step-2 {
+                display: block !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                width: 100% !important;
+            }
+            #presupuesto-detalle { 
+                border: none !important; 
+                box-shadow: none !important; 
+                margin: 0 !important; 
+                padding: 0 !important;
+                width: 100% !important;
+                border-radius: 0 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Fondo Interactivo Global -->
+    <div class="global-bg-container">
+        <div class="before-bg-image"></div>
+        <div class="after-bg-image" id="global-after-bg"></div>
+    </div>
+
+    <nav class="fixed top-0 w-full z-50 p-8 flex justify-between items-center mix-blend-difference text-white">
+        <div class="text-xl font-bold tracking-tighter">L257 / 6116</div>
+        <div class="space-x-8 text-sm uppercase tracking-widest hidden md:block">
+            <a href="#servicios" class="nav-link hover:opacity-50 transition">Servicios</a>
+            <a href="#calculadora" class="nav-link hover:opacity-50 transition">Presupuesto</a>
+            <a href="#normativa" class="nav-link hover:opacity-50 transition">Normativa</a>
+            <a href="blog.html" class="hover:opacity-50 transition">Blog</a>
+            <a href="#contacto" class="nav-link hover:opacity-50 transition">Contacto</a>
+        </div>
+    </nav>
+
+    <section class="section bg-gradient-to-b from-black/50 to-transparent">
+        <div class="relative z-10 text-center text-white px-4">
+            <h1 class="reveal-text text-5xl md:text-7xl font-bold mb-4">LEY 257 / 6116</h1>
+            <p class="reveal-text text-xl md:text-2xl font-light tracking-wide opacity-0" id="hero-sub">Certificación
+                Profesional de Fachadas en CABA.</p>
+        </div>
+    </section>
+
+    <section class="section glass-section px-8 py-24" id="servicios">
+        <div class="dark-glass-card p-8 md:p-16 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center w-full">
+            <div class="relative h-[60vh] rounded-xl overflow-hidden shadow-2xl service-img opacity-0 -translate-x-10">
+                <img src="images/balcony_inspection.png"
+                    class="w-full h-full object-cover hover:scale-105 transition duration-700"
+                    alt="Inspección de Balcón San Telmo">
+            </div>
+            <div class="space-y-12 block">
+                <div class="service-card opacity-0 translate-y-10">
+                    <span class="text-4xl font-bold text-zinc-500">01</span>
+                    <h3 class="text-2xl font-bold my-2">Inspección Técnica</h3>
+                    <p class="text-zinc-300 font-light">Evaluación detallada de frentes, balcones y muros bajo
+                        estándares
+                        del CE CABA. Relevamiento exhaustivo con tecnología avanzada.</p>
+                </div>
+                <div class="service-card opacity-0 translate-y-10">
+                    <span class="text-4xl font-bold text-zinc-500">02</span>
+                    <h3 class="text-2xl font-bold my-2">Gestión de Certificados</h3>
+                    <p class="text-zinc-300 font-light">Tramitación completa ante la AGC para la obtención del
+                        certificado
+                        de conservación. Agilidad y transparencia en cada paso.</p>
+                </div>
+                <div class="service-card opacity-0 translate-y-10">
+                    <span class="text-4xl font-bold text-zinc-500">03</span>
+                    <h3 class="text-2xl font-bold my-2">Asesoría de Obra</h3>
+                    <p class="text-zinc-300 font-light">Pliegos técnicos y dirección para reparaciones estructurales y
+                        estéticas, asegurando la durabilidad y belleza de su patrimonio.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section glass-section px-8" id="normativa">
+        <div class="dark-glass-card p-12 md:p-16 max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div class="flex flex-col justify-center">
+                <h2 class="text-4xl font-bold mb-6 text-white">Ley 6116: Actualización</h2>
+                <p class="text-zinc-300 leading-relaxed mb-8">
+                    La normativa vigente exige la conservación preventiva para evitar desprendimientos.
+                    Nuestra gestión asegura que su edificio cumpla con los nuevos plazos y exenciones.
+                </p>
+                <button onclick="openModal()"
+                    class="w-fit px-8 py-4 bg-white text-black text-xs uppercase tracking-widest font-bold hover:bg-zinc-200 transition shadow-xl hover:-translate-y-1 transform duration-300 rounded">Ver
+                    Calendario de Vencimientos</button>
+            </div>
+            <div class="relative overflow-hidden h-64 md:h-full rounded-xl">
+                <img src="images/Antiguas_fachadas_Buenos_202604071330 (2).jpeg"
+                    class="normativa-img w-full h-full object-cover scale-125"
+                    alt="Fachada Patrimonio Buenos Aires">
+            </div>
+        </div>
+    </section>
+
+    <section class="section glass-section px-8 py-24">
+        <div class="dark-glass-card p-12 max-w-7xl mx-auto w-full">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">Patrimonio Histórico</h2>
+                <p class="text-zinc-400 font-light max-w-2xl mx-auto">Compromiso con la preservación de la identidad arquitectónica de Buenos Aires.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="h-80 overflow-hidden rounded-xl gallery-item opacity-0 translate-y-10 group relative">
+                    <img src="images/French_facade_textures_202604071614 (1).jpeg" class="w-full h-full object-cover transition duration-700 group-hover:scale-110" alt="Textura Fachada 1">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                        <p class="text-white text-xs uppercase tracking-widest">Preservación</p>
+                    </div>
+                </div>
+                <div class="h-80 overflow-hidden rounded-xl gallery-item opacity-0 translate-y-10 group relative">
+                    <img src="images/French_facade_textures_202604071614 (2).jpeg" class="w-full h-full object-cover transition duration-700 group-hover:scale-110" alt="Textura Fachada 2">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                        <p class="text-white text-xs uppercase tracking-widest">Seguridad</p>
+                    </div>
+                </div>
+                <div class="h-80 overflow-hidden rounded-xl gallery-item opacity-0 translate-y-10 group relative">
+                    <img src="images/French_facade_textures_202604071614.jpeg" class="w-full h-full object-cover transition duration-700 group-hover:scale-110" alt="Textura Fachada 3">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                        <p class="text-white text-xs uppercase tracking-widest">Patrimonio</p>
+                    </div>
+                </div>
+                <div class="h-80 overflow-hidden rounded-xl gallery-item opacity-0 translate-y-10 group relative">
+                    <img src="images/art_deco_texture.png" class="w-full h-full object-cover transition duration-700 group-hover:scale-110" alt="Textura Art Deco">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                        <p class="text-white text-xs uppercase tracking-widest">Calidad</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section section-calc glass-section px-8" id="calculadora">
+        <div class="max-w-5xl mx-auto w-full">
+            <div class="dark-glass-card p-8 mb-8 text-center rounded-2xl shadow-2xl">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4 text-white">Calculadora de Presupuesto</h2>
+                <p class="text-zinc-300 font-light max-w-2xl mx-auto">Obtenga una estimación inmediata cargando los datos de su inmueble.</p>
+            </div>
+
+            <div class="glass-card p-8 md:p-12 rounded-2xl shadow-2xl relative overflow-hidden">
+                <!-- Paso 1: Datos Básicos -->
+                <div id="step-1" class="calc-step active space-y-8">
+                    <div class="space-y-4">
+                        <label class="block text-sm font-bold uppercase tracking-widest text-zinc-400">1. Ubicación</label>
+                        <input type="text" id="calc-direccion" placeholder="Ej: Laprida 1929, CABA" 
+                            class="w-full p-5 bg-white border border-zinc-200 rounded-xl focus:ring-2 focus:ring-black focus:outline-none transition text-lg shadow-sm">
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <label class="block text-sm font-bold uppercase tracking-widest text-zinc-400">2. Dimensiones de Fachada</label>
+                        <div id="frentes-container" class="space-y-4">
+                            <div class="flex gap-4 items-end frente-row">
+                                <div class="flex-1 space-y-1">
+                                    <span class="text-[10px] uppercase font-bold text-zinc-500">Ancho del Frente (m)</span>
+                                    <input type="number" class="calc-ancho w-full p-4 border rounded-xl focus:ring-black focus:outline-none" placeholder="8.66" step="0.01">
+                                </div>
+                                <div class="flex-none">
+                                    <button type="button" onclick="addFrente()" class="p-4 bg-zinc-100 rounded-xl hover:bg-zinc-200 transition text-zinc-600 font-bold">+</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="space-y-1 pt-2">
+                            <span class="text-[10px] uppercase font-bold text-zinc-500">Altura Total (m)</span>
+                            <input type="number" id="calc-alto" class="w-full p-4 border rounded-xl focus:ring-black focus:outline-none" placeholder="12.50" step="0.01">
+                        </div>
+                    </div>
+
+                    <div class="bg-zinc-900 text-white p-6 rounded-xl flex justify-between items-center">
+                        <div>
+                            <p class="text-xs opacity-60 uppercase tracking-tighter">Superficie Total de Fachada</p>
+                            <p class="text-2xl font-bold"><span id="res-area-fachada">0.00</span> m²</p>
+                        </div>
+                        <div class="text-right hidden">
+                            <p class="text-[10px] opacity-40">UVA hoy: $<span id="val-uva-hoy">--</span></p>
+                        </div>
+                    </div>
+
+                    <button id="btn-calculate" class="w-full py-5 bg-black text-white font-bold rounded-xl hover:bg-zinc-800 transition shadow-lg">Calcular Presupuesto</button>
+                </div>
+
+                <!-- Paso 2: Resultado -->
+                <div id="step-2" class="calc-step space-y-8">
+                    <div id="presupuesto-detalle" class="p-4 bg-white relative">
+                        <!-- Logo en el detalle visual -->
+                        <div class="flex justify-between items-start mb-6 border-b-2 border-black pb-6">
+                            <img src="images/Logo.png" alt="Logo" class="h-32">
+                            <div class="text-right text-[10px] uppercase tracking-widest text-zinc-500 font-bold">
+                                <p id="final-fecha">--</p>
+                                <p>Presupuesto Estimativo de Servicios</p>
+                            </div>
+                        </div>
+
+                        <h3 class="font-bold text-xl mb-6 uppercase tracking-tighter border-b pb-2">Presupuesto Trámite Ley 257 / 6116</h3>
+                        <p class="text-xs text-zinc-700 mb-6 font-bold uppercase">Sres. Propietarios inmueble <span id="final-dir">--</span></p>
+
+                        <!-- Detalle de los servicios -->
+                        <div class="mb-8 p-4 bg-zinc-50 rounded-xl border border-zinc-100">
+                            <h4 class="text-[10px] font-black uppercase text-black mb-2 tracking-wider">Detalle de los servicios incluidos:</h4>
+                            <ul class="text-xs space-y-1 text-zinc-800">
+                                <li class="flex gap-2"><span>•</span> <span>Inspección in-situ y relevamiento fotográfico del inmueble</span></li>
+                                <li class="flex gap-2"><span>•</span> <span>Informe técnico de conservación bajo normativa AGC</span></li>
+                                <li class="flex gap-2"><span>•</span> <span>Firma del profesional responsable y gestión ante el CPAU</span></li>
+                                <li class="flex gap-2"><span>•</span> <span>Obtención del Certificado de Conservación digital oficial</span></li>
+                            </ul>
+                        </div>
+
+                        <!-- Valores -->
+                        <div class="space-y-6">
+                            <div class="space-y-2">
+                                <h4 class="text-[9px] font-black uppercase text-zinc-400 border-b pb-1 tracking-widest">Desglose de Costos</h4>
+                                <div class="flex justify-between border-b border-zinc-100 py-2">
+                                    <span class="text-sm">Honorarios profesionales (Categoría <span id="final-cat">--</span>)</span>
+                                    <span id="final-honorarios" class="text-sm font-bold text-black">--</span>
+                                </div>
+                                <div class="flex justify-between border-b border-zinc-100 py-2">
+                                    <span class="text-sm">Arancel CPAU certificación de encomienda</span>
+                                    <span id="final-cpau" class="text-sm font-bold text-black">--</span>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-between items-center py-4 bg-black text-white px-6 rounded-xl">
+                                <span class="font-black text-base uppercase tracking-widest">Costo Total Estimado</span>
+                                <span id="final-total" class="text-2xl font-black">--</span>
+                            </div>
+
+                            <!-- Condiciones -->
+                            <div class="mt-8 pt-6 border-t border-zinc-200">
+                                <h4 class="text-[9px] font-black uppercase text-zinc-500 mb-2 tracking-widest">Condiciones Generales:</h4>
+                                <ul class="text-[9px] space-y-1 text-zinc-600 leading-tight">
+                                    <li>• <strong>Validez del presupuesto:</strong> 30 días. Transcurrido este tiempo, se deberá recotizar.</li>
+                                    <li>• <strong>Forma de pago honorarios:</strong> No se cobra anticipo. 100% contra entrega del trámite aprobado.</li>
+                                    <li>• <strong>Forma de pago aranceles:</strong> Según sean requeridos por el profesional.</li>
+                                    <li>• <strong>Designación Profesional:</strong> Debe realizarla el propietario o administrador según disposiciones de la AGC, ingresando con Clave Ciudad Nivel 2 al portal de instalaciones de AGIP.</li>
+                                    <li>• <strong>Vigencia:</strong> El certificado tendrá una validez de entre 4 y 15 años, a determinar por la AGC en función a la antigüedad.</li>
+                                    <li>• <strong>Informe Técnico:</strong> En caso de no estar en condiciones de certificar, se aconseja un informe técnico escrito detallando tareas de adecuación (valor no incluido).</li>
+                                </ul>
+                            </div>
+
+                            <!-- Firma -->
+                            <div class="mt-8 text-right">
+                                <p class="text-[10px] text-zinc-400 mb-0">Saluda atte,</p>
+                                <p class="text-xs font-bold text-black uppercase">arq. Iván M. Dimiero</p>
+                                <p class="text-[9px] text-zinc-500">CPAU 29103</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-4 no-print">
+                        <div class="flex flex-col md:flex-row gap-4">
+                            <button onclick="window.print()" class="flex-1 py-4 bg-zinc-100 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-zinc-200 transition">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4"></path></svg>
+                                Imprimir / Guardar PDF
+                            </button>
+                            <button onclick="sendWhatsappBudget()" class="flex-1 py-4 bg-green-500 text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-green-600 transition">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                                Enviar al Profesional
+                            </button>
+                        </div>
+                        <button onclick="changeStep(1)" class="w-full py-4 bg-zinc-100 text-zinc-800 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-zinc-200 transition text-[10px] uppercase tracking-widest">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                            Modificar datos o medidas
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section glass-section px-8 py-24" id="contacto">
+        <div class="dark-glass-card p-12 max-w-4xl mx-auto w-full">
+            <h2 class="text-4xl font-bold mb-12 text-center text-white">Contacto y Presupuestos</h2>
+            <form class="bg-white p-8 md:p-12 rounded-xl shadow-xl space-y-6 text-black">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="text-sm font-bold text-zinc-700">Nombre Completo</label>
+                        <input type="text"
+                            class="w-full p-4 bg-zinc-50 border border-zinc-200 rounded focus:outline-none focus:border-black transition"
+                            placeholder="Juan Pérez">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-sm font-bold text-zinc-700">Teléfono</label>
+                        <input type="tel"
+                            class="w-full p-4 bg-zinc-50 border border-zinc-200 rounded focus:outline-none focus:border-black transition"
+                            placeholder="11 1234-5678">
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-sm font-bold text-zinc-700">Dirección del Inmueble</label>
+                    <input type="text"
+                        class="w-full p-4 bg-zinc-50 border border-zinc-200 rounded focus:outline-none focus:border-black transition"
+                        placeholder="Av. Rivadavia 1234, CABA">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-sm font-bold text-zinc-700">Mensaje / Consulta</label>
+                    <textarea
+                        class="w-full p-4 bg-zinc-50 border border-zinc-200 rounded focus:outline-none focus:border-black transition h-32"
+                        placeholder="Detalles sobre el estado de la fachada..."></textarea>
+                </div>
+                <button type="submit"
+                    class="w-full py-4 bg-black text-white font-bold uppercase tracking-widest hover:bg-zinc-800 transition rounded">Solicitar
+                    Inspección</button>
+            </form>
+        </div>
+    </section>
+
+    <footer class="bg-black/90 backdrop-blur-md text-white py-24 px-8 text-center border-t border-zinc-800">
+        <h2 class="text-3xl font-light mb-12">¿Listo para certificar su fachada?</h2>
+        <div class="flex flex-col md:flex-row justify-center gap-8 items-center">
+            <a href="https://www.facebook.com/gestionLey257" target="_blank" class="text-lg hover:underline transition flex items-center gap-2">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                Facebook
+            </a>
+            <div class="h-px w-12 bg-zinc-700 hidden md:block"></div>
+            <a href="https://wa.me/5491137787305" class="text-lg font-bold hover:text-green-400 transition"
+                target="_blank">WhatsApp Directo: 11-3778-7305</a>
+            <div class="h-px w-12 bg-zinc-700 hidden md:block"></div>
+            <p class="text-zinc-400">Buenos Aires, Argentina</p>
+        </div>
+    </footer>
+
+    <!-- Grupo Flotante Inferior Derecho -->
+    <div class="fixed bottom-8 right-8 z-50 flex flex-col items-end gap-4">
+        
+        <!-- Botón WhatsApp -->
+        <a href="https://wa.me/5491137787305"
+            class="bg-green-500 text-white p-4 rounded-full shadow-2xl hover:scale-110 hover:bg-green-600 transition duration-300 flex items-center justify-center cursor-pointer"
+            target="_blank" aria-label="Contactar por WhatsApp">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+        </a>
+
+        <!-- Consulta de Vigencia Gratuita -->
+        <div class="bg-white/95 shadow-2xl p-4 rounded-xl border border-zinc-200 w-72 flex flex-col gap-2 transform transition-transform hover:-translate-y-1">
+            <h4 class="text-[11px] font-bold text-black uppercase tracking-widest border-b pb-1">¿Tengo mi certificado vigente?</h4>
+            <p class="text-[10px] text-zinc-600 leading-tight">Ingrese su dirección para consultar SIN CARGO si su inmueble tiene o no su certificado de conservación vigente.</p>
+            <div class="flex gap-2 mt-1">
+                <input type="text" id="quick-address" placeholder="Ej: Corrientes 123" class="w-full bg-zinc-50 border border-zinc-200 text-xs p-2 rounded focus:outline-none focus:border-black text-black">
+                <button onclick="sendQuickConsult()" class="bg-black text-white px-3 rounded text-xs hover:bg-zinc-800 transition">→</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Calendario -->
+    <div id="modal-calendario" class="fixed inset-0 z-[100] flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-md" onclick="closeModal()"></div>
+        <div class="bg-white rounded-2xl shadow-2xl relative z-10 w-11/12 max-w-2xl overflow-hidden glass-card">
+            <div class="p-8 border-b border-zinc-100 flex justify-between items-center bg-zinc-50">
+                <img src="images/Logo.png" alt="Logo L257" class="h-10">
+                <button onclick="closeModal()" class="text-zinc-400 hover:text-black transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="p-8">
+                <h3 class="text-2xl font-bold mb-2">Calendario Reglamentario</h3>
+                <p class="text-sm text-zinc-600 mb-8">Frecuencia de presentación del certificado según la antigüedad del edificio (Ley 6116):</p>
+                
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-zinc-100">
+                            <th class="p-4 font-bold text-sm text-zinc-700">Antigüedad del Inmueble</th>
+                            <th class="p-4 font-bold text-sm text-zinc-700">Inspección Requerida</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b border-zinc-100 hover:bg-zinc-50 transition">
+                            <td class="p-4 text-sm font-light">Más de 70 años</td>
+                            <td class="p-4 text-sm font-bold">Cada 4 años</td>
+                        </tr>
+                        <tr class="border-b border-zinc-100 hover:bg-zinc-50 transition">
+                            <td class="p-4 text-sm font-light">Entre 50 y 70 años</td>
+                            <td class="p-4 text-sm font-bold">Cada 5 años</td>
+                        </tr>
+                        <tr class="border-b border-zinc-100 hover:bg-zinc-50 transition">
+                            <td class="p-4 text-sm font-light">Entre 34 y 50 años</td>
+                            <td class="p-4 text-sm font-bold">Cada 6 años</td>
+                        </tr>
+                        <tr class="border-b border-zinc-100 hover:bg-zinc-50 transition">
+                            <td class="p-4 text-sm font-light">Entre 25 y 34 años</td>
+                            <td class="p-4 text-sm font-bold">Cada 8 años</td>
+                        </tr>
+                        <tr class="border-b border-zinc-100 hover:bg-zinc-50 transition">
+                            <td class="p-4 text-sm font-light">Entre 15 y 24 años</td>
+                            <td class="p-4 text-sm font-bold">Cada 10 años</td>
+                        </tr>
+                        <tr class="hover:bg-zinc-50 transition">
+                            <td class="p-4 text-sm font-light">Menos de 15 años</td>
+                            <td class="p-4 text-sm font-bold">Cada 15 años</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="bg-zinc-50 p-4 text-center border-t border-zinc-100">
+                <button onclick="closeModal()" class="px-8 py-3 bg-black text-white text-xs uppercase tracking-widest font-bold rounded hover:bg-zinc-800 transition">Entendido</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+
+        // Smooth Scroll para navegación
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', e => {
+                e.preventDefault();
+                const target = e.target.getAttribute('href');
+                gsap.to(window, { duration: 1.2, scrollTo: target, ease: "power4.inOut" });
+            });
+        });
+
+        // Animación de entrada Hero
+        window.onload = () => {
+            const tl = gsap.timeline();
+            tl.from("h1", { y: 100, opacity: 0, duration: 1.5, ease: "power4.out" })
+                .to("#hero-sub", { opacity: 1, y: -10, duration: 1, ease: "power2.out" }, "-=0.8")
+                .to(".hero-img", { scale: 1, duration: 3, ease: "power2.out" }, 0);
+        };
+
+        // ScrollReveal genérico
+        const revealConfig = {
+            opacity: 1,
+            y: 0,
+            duration: 1.2,
+            ease: "power3.out",
+            stagger: 0.2
+        };
+
+        gsap.to(".service-card, .service-img", {
+            scrollTrigger: { trigger: "#servicios", start: "top 70%" },
+            ...revealConfig
+        });
+
+        gsap.to(".gallery-item", {
+            scrollTrigger: { trigger: ".gallery-item", start: "top 80%" },
+            ...revealConfig
+        });
+
+        gsap.to(".normativa-img", {
+            scrollTrigger: { trigger: "#normativa", start: "top 60%", scrub: true },
+            scale: 1,
+            y: -30
+        });
+
+        // Animación de Reparación Global (Clip Path)
+        // Se termina de revelar muy rápido para que esté lista ANTES de que los servicios asomen
+        gsap.to("#global-after-bg", {
+            scrollTrigger: {
+                trigger: "body",
+                start: "top top",
+                end: "500px", 
+                scrub: true
+            },
+            clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+            ease: "none"
+        });
+
+        // Funciones del Modal
+        function openModal() {
+            const modal = document.getElementById('modal-calendario');
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal-calendario');
+            modal.classList.add('opacity-0');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+
+        // --- LÓGICA DE LA CALCULADORA ---
+        let currentUVA = 0;
+        fetch('https://api.argentinadatos.com/v1/finanzas/indices/uva')
+            .then(res => res.json())
+            .then(data => {
+                currentUVA = data[data.length - 1].valor;
+                document.getElementById('val-uva-hoy').innerText = currentUVA.toLocaleString('es-AR', {minimumFractionDigits: 2});
+            })
+            .catch(() => {
+                currentUVA = 1867.20;
+                document.getElementById('val-uva-hoy').innerText = currentUVA.toLocaleString('es-AR');
+            });
+
+        function addFrente() {
+            const container = document.getElementById('frentes-container');
+            const div = document.createElement('div');
+            div.className = 'flex gap-4 items-end frente-row opacity-0 -translate-y-2';
+            div.innerHTML = `
+                <div class="flex-1 space-y-1">
+                    <span class="text-[10px] uppercase font-bold text-zinc-500">Ancho Extra (m)</span>
+                    <input type="number" class="calc-ancho w-full p-4 border rounded-xl focus:ring-black focus:outline-none" placeholder="0.00" step="0.01">
+                </div>
+                <div class="flex-none">
+                    <button type="button" onclick="this.parentElement.parentElement.remove(); updateArea();" class="p-4 bg-red-50 rounded-xl hover:bg-red-100 transition text-red-600 font-bold">×</button>
+                </div>
+            `;
+            container.appendChild(div);
+            gsap.to(div, { opacity: 1, y: 0, duration: 0.4 });
+            div.querySelector('input').addEventListener('input', updateArea);
+        }
+
+        function updateArea() {
+            const anchos = document.querySelectorAll('.calc-ancho');
+            let totalAncho = 0;
+            anchos.forEach(a => totalAncho += parseFloat(a.value) || 0);
+            const alto = parseFloat(document.getElementById('calc-alto').value) || 0;
+            const area = totalAncho * alto;
+            document.getElementById('res-area-fachada').innerText = area.toFixed(2);
+        }
+
+        document.getElementById('calc-alto').addEventListener('input', updateArea);
+        document.querySelector('.calc-ancho').addEventListener('input', updateArea);
+
+        document.getElementById('btn-calculate').onclick = () => {
+            const dir = document.getElementById('calc-direccion').value;
+            const area = parseFloat(document.getElementById('res-area-fachada').innerText);
+            if (!dir || area <= 0) return alert("Complete los datos requeridos.");
+
+            let cpau = 0, honorarios = 0, cat = "";
+            if (area <= 600) { cat = "T1"; cpau = 43000; honorarios = (currentUVA / 1.55) * area; }
+            else if (area <= 1200) { cat = "T2"; cpau = 55000; honorarios = (currentUVA / 2.53) * area; }
+            else { cat = "T3"; cpau = 127000; honorarios = (currentUVA / 2.33) * area; }
+
+            if (honorarios < 120000) honorarios = 120000;
+            const total = cpau + honorarios;
+
+            document.getElementById('final-dir').innerText = dir;
+            document.getElementById('final-cat').innerText = cat;
+            document.getElementById('final-cpau').innerText = `$ ${cpau.toLocaleString('es-AR')}`;
+            document.getElementById('final-honorarios').innerText = `$ ${honorarios.toLocaleString('es-AR')}`;
+            document.getElementById('final-total').innerText = `$ ${Math.round(total).toLocaleString('es-AR')}`;
+            
+            const now = new Date();
+            document.getElementById('final-fecha').innerText = `BA, ${now.getDate()}/${now.getMonth()+1}/${now.getFullYear()}`;
+            changeStep(2);
+        };
+
+        function changeStep(n) {
+            gsap.to(`.calc-step.active`, { opacity: 0, y: 15, duration: 0.3, onComplete: () => {
+                document.querySelectorAll('.calc-step').forEach(s => s.classList.remove('active'));
+                const nextStep = document.getElementById(`step-${n}`);
+                nextStep.classList.add('active');
+                gsap.fromTo(nextStep, { opacity: 0, y: -15 }, { opacity: 1, y: 0, duration: 0.5 });
+            }});
+        }
+
+        function sendWhatsappBudget() {
+            const dir = document.getElementById('final-dir').innerText;
+            const total = document.getElementById('final-total').innerText;
+            const text = encodeURIComponent(`Hola Ivan! Calculé un presupuesto en tu web para el inmueble en ${dir} por un total de ${total}. Me gustaría coordinar una visita.`);
+            window.open(`https://wa.me/5491137787305?text=${text}`, '_blank');
+        }
+
+        // Lógica para enviar consulta rápida de vigencia
+        function sendQuickConsult() {
+            const addressInput = document.getElementById('quick-address').value;
+            if(!addressInput.trim()) {
+                alert("Por favor ingrese una dirección antes de consultar.");
+                return;
+            }
+            const text = encodeURIComponent(`Hola, quisiera consultar sin cargo si mi edificio ubicado en ${addressInput} posee el certificado Ley 257 / 6116 al día y vigente.`);
+            window.open(`https://wa.me/5491137787305?text=${text}`, '_blank');
+        }
+    </script>
+</body>
+
+</html>
