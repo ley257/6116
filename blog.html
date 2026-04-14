@@ -1,107 +1,184 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog - Ley 257/6116 CABA | Certificación de Fachadas</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Blog de Trámites | Aviso de Obra CABA</title>
+    <meta name="description" content="Artículos de interés sobre avisos de obra, trámites en GCBA, y consejos para refacciones legales en CABA. Gestión del proceso del trámite.">
+    <link rel="stylesheet" href="style.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap');
-
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: #fafafa;
-            overflow-x: hidden;
-            color: #18181b; /* zinc-900 */
+        .blog-hero {
+            padding: 160px 0 80px;
+            background: linear-gradient(to bottom, var(--slate-100), var(--background));
+            text-align: center;
+        }
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 32px;
+            margin-top: -40px;
+            position: relative;
+            z-index: 10;
+        }
+        .blog-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--slate-100);
+            transition: var(--transition);
+        }
+        .blog-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+        }
+        .blog-img {
+            width: 100%;
+            height: 200px;
+            background: var(--slate-200);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+        .blog-content {
+            padding: 24px;
+        }
+        .blog-meta {
+            font-size: 0.8rem;
+            color: var(--primary);
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .blog-title {
+            font-size: 1.25rem;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+        .blog-excerpt {
+            font-size: 0.95rem;
+            color: var(--slate-600);
+            margin-bottom: 20px;
+        }
+        .read-more {
+            font-weight: 600;
+            color: var(--black);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .read-more:hover {
+            color: var(--primary);
+            gap: 12px;
         }
     </style>
 </head>
-
 <body>
 
-    <nav class="fixed top-0 w-full z-50 p-8 flex justify-between items-center bg-white shadow bg-opacity-90 backdrop-blur">
-        <div class="text-xl font-bold tracking-tighter text-black"><a href="index.html">L257 / 6116</a></div>
-        <div class="space-x-8 text-sm uppercase tracking-widest hidden md:block text-black">
-            <a href="index.html" class="hover:text-zinc-500 transition">Volver a Inicio</a>
+    <!-- NAV -->
+    <nav>
+        <div class="container">
+            <a href="index.html" class="nav-logo">
+                <img src="https://raw.githubusercontent.com/ley257/aviso-de-obra/main/ChatGPT%20Image%2031%20mar%202026%2C%2019_07_51.png" alt="Aviso de Obra CABA">
+            </a>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html#servicios" class="nav-link">Servicios</a></li>
+                <li><a href="index.html#proceso" class="nav-link">Proceso</a></li>
+                <li><a href="index.html#presupuesto" class="nav-link">Presupuesto</a></li>
+                <li><a href="blog.html" class="nav-link" style="color: var(--primary);">Blog</a></li>
+                <li><a href="index.html#contacto" class="nav-link">Contacto</a></li>
+            </ul>
+            <div class="nav-actions">
+                <a href="index.html#presupuesto" class="nav-cta">Cotizar Ahora</a>
+                <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Abrir menú">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
         </div>
     </nav>
 
-    <header class="pt-32 pb-20 px-8 bg-zinc-900 text-white text-center">
-        <h1 class="text-5xl font-bold mb-4">Notas de Interés</h1>
-        <p class="text-xl font-light text-zinc-400 max-w-2xl mx-auto">Información técnica y buenas prácticas para la conservación del patrimonio y el cumplimiento de la Ley 257/6116 en Buenos Aires.</p>
-    </header>
-
-    <main class="max-w-4xl mx-auto px-8 py-16 space-y-24">
-
-        <!-- Artículo 1 -->
-        <article class="bg-white rounded-xl shadow-lg border border-zinc-100 overflow-hidden flex flex-col md:flex-row">
-            <div class="md:w-1/3">
-                <img src="images/art_deco_texture.png" alt="Símil Piedra París" class="w-full h-full object-cover">
+    <main>
+        <section class="blog-hero">
+            <div class="container">
+                <span class="section-tag">Guía del Trámite</span>
+                <h1 class="hero-title">Centro de Conocimiento</h1>
+                <p class="hero-desc" style="margin: 0 auto 40px;">Descubrí todo lo que necesitás saber para realizar tus refacciones bajo normativa vigente en la Ciudad de Buenos Aires.</p>
             </div>
-            <div class="p-8 md:w-2/3 flex flex-col justify-center">
-                <span class="text-xs uppercase tracking-widest text-zinc-400 mb-2">Restauración y Mantenimiento</span>
-                <h2 class="text-3xl font-bold mb-4">Conservación de Revoques Símil Piedra París</h2>
-                <div class="text-zinc-600 font-light space-y-4 leading-relaxed">
-                    <p>
-                        Según la Guía de Buenas Prácticas para inmuebles catalogados, la conservación de los revoques tradicionales, como el <strong>Símil Piedra París</strong>, requiere de un cuidado profesional especializado. Lo primordial es <strong>evitar pintar sobre ellos</strong>. Las pinturas sintéticas y plásticas impiden que el revoque original "respire", lo cual genera condensación de humedad, englobamiento y, con el tiempo, el desprendimiento de porciones de la fachada.
-                    </p>
-                    <p>
-                        El proceso dictado por buenas prácticas implica una limpieza sutil (nunca hidrolavado a alta presión), el cateo de zonas flojas, y la restitución del material con un mortero de características granulométricas e hidrófugas idénticas a las originales. Solo así aseguramos la estética original y pasamos con éxito las inspecciones estipuladas en la Ley 6116.
-                    </p>
+        </section>
+
+        <section class="section-padding">
+            <div class="container">
+                <div class="blog-grid">
+                    <!-- Placeholder Card 1 -->
+                    <article class="blog-card reveal">
+                        <div class="blog-img">🏗️</div>
+                        <div class="blog-content">
+                            <span class="blog-meta">Normativa</span>
+                            <h3 class="blog-title">¿Qué obras requieren un Aviso de Obra en CABA?</h3>
+                            <p class="blog-excerpt">No todas las refacciones necesitan el mismo permiso. Te explicamos la diferencia entre aviso, permiso menor y permiso de obra.</p>
+                            <a href="#" class="read-more">Leer artículo completo →</a>
+                        </div>
+                    </article>
+
+                    <!-- Placeholder Card 2 -->
+                    <article class="blog-card reveal" style="transition-delay: 0.1s">
+                        <div class="blog-img">📋</div>
+                        <div class="blog-content">
+                            <span class="blog-meta">Trámites</span>
+                            <h3 class="blog-title">La importancia del Informe de Dominio RPI</h3>
+                            <p class="blog-excerpt">Conocé por qué el GCBA exige este documento y cómo puede evitarte problemas legales con tu propiedad.</p>
+                            <a href="#" class="read-more">Leer artículo completo →</a>
+                        </div>
+                    </article>
+
+                    <!-- Placeholder Card 3 -->
+                    <article class="blog-card reveal" style="transition-delay: 0.2s">
+                        <div class="blog-img">💡</div>
+                        <div class="blog-content">
+                            <span class="blog-meta">Consejos</span>
+                            <h3 class="blog-title">Cómo acelerar tu trámite de refacción</h3>
+                            <p class="blog-excerpt">Manual de buenas prácticas y documentación necesaria para que tu aviso de obra salga en menos de 48hs.</p>
+                            <a href="#" class="read-more">Leer artículo completo →</a>
+                        </div>
+                    </article>
+                </div>
+
+                <div style="margin-top: 80px; text-align: center;" class="reveal">
+                    <div style="background: white; padding: 48px; border-radius: 24px; box-shadow: var(--shadow-lg); max-width: 800px; margin: 0 auto;">
+                        <h3>¿Buscás un tema específico?</h3>
+                        <p style="margin-bottom: 32px; color: var(--slate-600);">Estamos preparando nuevos artículos generados con inteligencia artificial para cubrir todas tus dudas sobre construcción y normativa.</p>
+                        <a href="index.html#contacto" class="btn-primary">Sugerir un tema</a>
+                    </div>
                 </div>
             </div>
-        </article>
-
-        <!-- Artículo 2 -->
-        <article class="bg-white rounded-xl shadow-lg border border-zinc-100 overflow-hidden flex flex-col md:flex-row-reverse">
-            <div class="md:w-1/3">
-                <img src="images/balcony_inspection.png" alt="Herrería y Balcones" class="w-full h-full object-cover">
-            </div>
-            <div class="p-8 md:w-2/3 flex flex-col justify-center">
-                <span class="text-xs uppercase tracking-widest text-zinc-400 mb-2">Seguridad Estructural</span>
-                <h2 class="text-3xl font-bold mb-4">Tratamiento de Herrería Histórica en Balcones</h2>
-                <div class="text-zinc-600 font-light space-y-4 leading-relaxed">
-                    <p>
-                        La herrería artística que adorna los edificios clásicos de CABA no es puramente decorativa; está integrada estructuralmente a la mampostería. Las inspecciones de la AGC detectan frecuentemente que la corrosión no tratada dilata los perfiles empotrados en la pared, fracturando cornisas y ménsulas.
-                    </p>
-                    <p>
-                        La solución recomendada en los planos de obras de conservación no es retirar o reemplazar con material liviano, sino restaurar in-situ o en taller. Se debe remover el óxido superficialmente, tratar químicamente y volver a sellar con un esquema de pintura apropiado (convertidor y esmalte satinado), verificando en cada punto de anclaje que no haya filtraciones de agua ocultas que desencadenen nuevos problemas según los estándares del Código de Edificación.
-                    </p>
-                </div>
-            </div>
-        </article>
-
-        <!-- Artículo 3 -->
-        <article class="bg-white rounded-xl shadow-lg border border-zinc-100 overflow-hidden flex flex-col md:flex-row">
-            <div class="md:w-1/3">
-                <img src="images/Antiguas_fachadas_Buenos_202604071330 (3).jpeg" alt="Prevención de humedad" class="w-full h-full object-cover">
-            </div>
-            <div class="p-8 md:w-2/3 flex flex-col justify-center">
-                <span class="text-xs uppercase tracking-widest text-zinc-400 mb-2">Marco Normativo</span>
-                <h2 class="text-3xl font-bold mb-4">Evaluación Preventiva y la Ley 6116</h2>
-                <div class="text-zinc-600 font-light space-y-4 leading-relaxed">
-                    <p>
-                        La reciente actualización a la Ley 257 (Ley 6116) exige que los edificios cumplan con los ciclos de eximición y plazos rigurosos de mantenimiento para evitar multas. Las "patologías comunes", como la rotura de caños pluviales o zinguerías envejecidas, arrastran agua hacia la masa del muro creando problemas enormes de humedad.
-                    </p>
-                    <p>
-                        Actuar a tiempo en la limpieza de bajadas pluviales y sellado de cubiertas en las emblemáticas casas chorizo o en edificios de renta garantiza la preservación de la pintura superficial y la integridad estructural. Al elegir profesionales con conocimientos en "Buenas Prácticas", su certificado frente al CE de CABA se puede gestionar de forma ágil, protegiendo tanto su seguridad jurídica como el valor del bien.
-                    </p>
-                </div>
-            </div>
-        </article>
-
+        </section>
     </main>
 
-    <footer class="bg-zinc-900 text-white py-12 px-8 text-center mt-12">
-        <a href="index.html#contacto" class="text-lg hover:underline transition">Consulte con nosotros por su certificado</a>
-        <p class="text-zinc-500 text-sm mt-4">Ley 257/6116 - Buenos Aires, Argentina</p>
+    <!-- FOOTER -->
+    <footer style="padding: 60px 0; border-top: 1px solid var(--slate-200); background-color: var(--slate-50);">
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px;">
+            <div class="nav-logo">
+                <img src="https://raw.githubusercontent.com/ley257/aviso-de-obra/main/ChatGPT%20Image%2031%20mar%202026%2C%2019_07_51.png" alt="Aviso de Obra CABA" style="height: 40px; opacity: 0.8;">
+            </div>
+            <p style="color: var(--slate-500); font-size: 0.9rem;">© 2026 Aviso de Obra CABA. Trámites rápidos y legales.</p>
+            <div style="display: flex; gap: 24px;">
+                <a href="index.html" class="nav-link">Inicio</a>
+                <a href="index.html#contacto" class="nav-link">Soporte</a>
+            </div>
+        </div>
     </footer>
 
-    <!-- Botón Flotante WhatsApp -->
-    <a href="https://wa.me/5491137787305" class="fixed bottom-8 right-8 bg-green-500 text-white p-4 rounded-full shadow-2xl hover:scale-110 hover:bg-green-600 transition duration-300 z-50 flex items-center justify-center cursor-pointer" target="_blank" aria-label="Contactar por WhatsApp">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 0C5.385 0 0 5.385 0 12.031c0 2.12.553 4.106 1.543 5.864L.014 23.987l6.234-1.636a11.964 11.964 0 005.783 1.488h.004c6.645 0 12.031-5.386 12.031-12.031S18.677 0 12.031 0zm0 21.84c-1.802 0-3.565-.484-5.112-1.402l-.367-.217-3.797.996 1.015-3.7-.238-.38A10.024 10.024 0 012 12.031C2 6.505 6.505 2 12.031 2c2.68 0 5.2 1.045 7.095 2.94A10.005 10.005 0 0122.062 12.03c0 5.525-4.505 10.03-10.031 10.03v.001zm5.503-7.518c-.302-.15-1.785-.882-2.064-.983-.278-.101-.482-.15-.685.15s-.779.983-.956 1.184c-.177.202-.355.228-.657.078-1.503-.76-2.522-1.474-3.551-3.21-.264-.447.262-.416.843-1.58.101-.202.051-.38-.025-.53-.075-.15-.685-1.651-.938-2.261-.247-.594-.499-.512-.685-.522-.178-.009-.38-.01-.582-.01s-.532.076-.809.378c-.278.303-1.063 1.036-1.063 2.527s1.088 2.93 1.24 3.132c.15.201 2.136 3.256 5.176 4.566 2.016.868 2.827.917 3.905.772 1.21-.162 3.797-1.55 4.329-3.05.534-1.5.534-2.784.38-3.052-.155-.268-.557-.419-.858-.57z"/></svg>
+    <!-- WhatsApp Flotante -->
+    <a href="https://wa.me/5491137787305?text=Hola!%20Vengo%20de%20la%20web%20y%20quería%20consultar%20por%20un%20aviso%20de%20obra." class="whatsapp-float" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
     </a>
 
+    <script src="script.js"></script>
 </body>
 </html>
