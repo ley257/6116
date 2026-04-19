@@ -153,6 +153,15 @@
                 print-color-adjust: exact;
             }
         }
+
+        .text-readable {
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-blur {
+            background: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 100%);
+            backdrop-filter: blur(4px);
+        }
     </style>
 </head>
 
@@ -164,9 +173,9 @@
         <div class="after-bg-image" id="global-after-bg"></div>
     </div>
 
-    <nav class="fixed top-0 w-full z-50 p-8 flex justify-between items-center mix-blend-difference text-white">
-        <div class="text-xl font-bold tracking-tighter">L257 / 6116</div>
-        <div class="space-x-8 text-sm uppercase tracking-widest hidden md:block">
+    <nav class="fixed top-0 w-full z-50 p-6 md:p-8 flex justify-between items-center text-white nav-blur transition duration-500">
+        <div class="text-xl font-bold tracking-tighter text-readable">L257 / 6116</div>
+        <div class="space-x-8 text-sm uppercase tracking-widest hidden md:block text-readable">
             <a href="#servicios" class="nav-link hover:opacity-50 transition">Servicios</a>
             <a href="#calculadora" class="nav-link hover:opacity-50 transition">Presupuesto</a>
             <a href="#normativa" class="nav-link hover:opacity-50 transition">Normativa</a>
@@ -177,8 +186,8 @@
 
     <section class="section bg-gradient-to-b from-black/50 to-transparent">
         <div class="relative z-10 text-center text-white px-4">
-            <h1 class="reveal-text text-5xl md:text-7xl font-bold mb-4">LEY 257 / 6116</h1>
-            <p class="reveal-text text-xl md:text-2xl font-light tracking-wide opacity-0" id="hero-sub">Certificación
+            <h1 class="reveal-text text-5xl md:text-7xl font-bold mb-4 text-readable">LEY 257 / 6116</h1>
+            <p class="reveal-text text-xl md:text-2xl font-light tracking-wide opacity-0 text-readable" id="hero-sub">Certificación
                 Profesional de Fachadas en CABA.</p>
         </div>
     </section>
