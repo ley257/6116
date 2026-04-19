@@ -443,9 +443,9 @@
         </div>
     </section>
 
-    <footer class="bg-black/90 backdrop-blur-md text-white py-24 px-8 text-center border-t border-zinc-800">
-        <h2 class="text-3xl font-light mb-12">¿Listo para certificar su fachada?</h2>
-        <div class="flex flex-col md:flex-row justify-center gap-8 items-center">
+    <footer class="bg-black/90 backdrop-blur-md text-white py-12 px-8 text-center border-t border-zinc-800">
+        <h2 class="text-2xl font-light mb-6">¿Listo para certificar su fachada?</h2>
+        <div class="flex flex-col md:flex-row justify-center gap-4 items-center">
             <a href="https://www.facebook.com/gestionLey257" target="_blank" class="text-lg hover:underline transition flex items-center gap-2">
                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
                 Facebook
@@ -508,23 +508,23 @@
                             <td class="p-4 text-sm font-bold">Cada 4 años</td>
                         </tr>
                         <tr class="border-b border-zinc-100 hover:bg-zinc-50 transition">
-                            <td class="p-4 text-sm font-light">Entre 50 y 70 años</td>
+                            <td class="p-4 text-sm font-light">Más de 55 a 70 años</td>
                             <td class="p-4 text-sm font-bold">Cada 5 años</td>
                         </tr>
                         <tr class="border-b border-zinc-100 hover:bg-zinc-50 transition">
-                            <td class="p-4 text-sm font-light">Entre 34 y 50 años</td>
-                            <td class="p-4 text-sm font-bold">Cada 6 años</td>
+                            <td class="p-4 text-sm font-light">Más de 45 a 55 años</td>
+                            <td class="p-4 text-sm font-bold">Cada 9 años</td>
                         </tr>
                         <tr class="border-b border-zinc-100 hover:bg-zinc-50 transition">
-                            <td class="p-4 text-sm font-light">Entre 25 y 34 años</td>
-                            <td class="p-4 text-sm font-bold">Cada 8 años</td>
-                        </tr>
-                        <tr class="border-b border-zinc-100 hover:bg-zinc-50 transition">
-                            <td class="p-4 text-sm font-light">Entre 15 y 24 años</td>
+                            <td class="p-4 text-sm font-light">Más de 35 a 45 años</td>
                             <td class="p-4 text-sm font-bold">Cada 10 años</td>
                         </tr>
+                        <tr class="border-b border-zinc-100 hover:bg-zinc-50 transition">
+                            <td class="p-4 text-sm font-light">Más de 25 a 35 años</td>
+                            <td class="p-4 text-sm font-bold">Cada 12 años</td>
+                        </tr>
                         <tr class="hover:bg-zinc-50 transition">
-                            <td class="p-4 text-sm font-light">Menos de 15 años</td>
+                            <td class="p-4 text-sm font-light">De 15 a 25 años</td>
                             <td class="p-4 text-sm font-bold">Cada 15 años</td>
                         </tr>
                     </tbody>
@@ -656,11 +656,20 @@
             if (!dir || area <= 0) return alert("Complete los datos requeridos.");
 
             let cpau = 0, honorarios = 0, cat = "";
-            if (area <= 600) { cat = "T1"; cpau = 43000; honorarios = (currentUVA / 1.55) * area; }
-            else if (area <= 1200) { cat = "T2"; cpau = 55000; honorarios = (currentUVA / 2.53) * area; }
-            else { cat = "T3"; cpau = 127000; honorarios = (currentUVA / 2.33) * area; }
+            
+            // Definimos los topes de honorarios de cada categoría para asegurar el piso de la siguiente
+            const hT1Max = (currentUVA / 1.55) * 600;
+            const hT2Max = Math.max((currentUVA / 2.53) * 1200, hT1Max);
 
-            if (honorarios < 120000) honorarios = 120000;
+            if (area <= 600) { 
+                cat = "T1"; cpau = 43000; honorarios = (currentUVA / 1.55) * area; 
+            } else if (area <= 1200) { 
+                cat = "T2"; cpau = 55000; honorarios = Math.max((currentUVA / 2.53) * area, hT1Max); 
+            } else { 
+                cat = "T3"; cpau = 127000; honorarios = Math.max((currentUVA / 2.33) * area, hT2Max); 
+            }
+
+            if (honorarios < 180000) honorarios = 180000;
             const total = cpau + honorarios;
 
             document.getElementById('final-dir').innerText = dir;
