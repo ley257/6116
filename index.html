@@ -149,7 +149,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap');
 
@@ -329,6 +328,10 @@
             <h1 class="reveal-text text-5xl md:text-7xl font-bold mb-4 text-readable">LEY 257 / 6116</h1>
             <p class="reveal-text text-xl md:text-2xl font-light tracking-wide opacity-0 text-readable" id="hero-sub">Certificación
                 Profesional de Fachadas en CABA.</p>
+            <div class="mt-6 inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full opacity-0 translate-y-4" id="trust-badge">
+                <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                <span class="text-xs font-bold uppercase tracking-widest">Sin adelantos: 100% contra entrega</span>
+            </div>
         </div>
     </section>
 
@@ -337,7 +340,7 @@
             <div class="relative h-[60vh] rounded-xl overflow-hidden shadow-2xl service-img opacity-0 -translate-x-10">
                 <img src="images/balcony_inspection.png"
                     class="w-full h-full object-cover hover:scale-105 transition duration-700"
-                    alt="Inspección de Balcón San Telmo">
+                    alt="Inspección de Balcón San Telmo" loading="lazy">
             </div>
             <div class="space-y-12 block">
                 <div class="service-card opacity-0 translate-y-10">
@@ -379,7 +382,7 @@
             <div class="relative overflow-hidden h-64 md:h-full rounded-xl">
                 <img src="images/Antiguas_fachadas_Buenos_202604071330 (2).jpeg"
                     class="normativa-img w-full h-full object-cover scale-125"
-                    alt="Fachada Patrimonio Buenos Aires">
+                    alt="Fachada Patrimonio Buenos Aires" loading="lazy">
             </div>
         </div>
     </section>
@@ -558,30 +561,30 @@
     <section class="section glass-section px-8 py-24" id="contacto">
         <div class="dark-glass-card p-12 max-w-4xl mx-auto w-full">
             <h2 class="text-4xl font-bold mb-12 text-center text-white">Contacto y Presupuestos</h2>
-            <form class="bg-white p-8 md:p-12 rounded-xl shadow-xl space-y-6 text-black">
+            <form id="contact-form" onsubmit="handleContactSubmit(event)" class="bg-white p-8 md:p-12 rounded-xl shadow-xl space-y-6 text-black">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="space-y-2">
                         <label class="text-sm font-bold text-zinc-700">Nombre Completo</label>
-                        <input type="text"
+                        <input type="text" id="contact-name" required
                             class="w-full p-4 bg-zinc-50 border border-zinc-200 rounded focus:outline-none focus:border-black transition"
                             placeholder="Juan Pérez">
                     </div>
                     <div class="space-y-2">
                         <label class="text-sm font-bold text-zinc-700">Teléfono</label>
-                        <input type="tel"
+                        <input type="tel" id="contact-phone" required
                             class="w-full p-4 bg-zinc-50 border border-zinc-200 rounded focus:outline-none focus:border-black transition"
                             placeholder="11 1234-5678">
                     </div>
                 </div>
                 <div class="space-y-2">
                     <label class="text-sm font-bold text-zinc-700">Dirección del Inmueble</label>
-                    <input type="text"
+                    <input type="text" id="contact-address" required
                         class="w-full p-4 bg-zinc-50 border border-zinc-200 rounded focus:outline-none focus:border-black transition"
                         placeholder="Av. Rivadavia 1234, CABA">
                 </div>
                 <div class="space-y-2">
                     <label class="text-sm font-bold text-zinc-700">Mensaje / Consulta</label>
-                    <textarea
+                    <textarea id="contact-msg"
                         class="w-full p-4 bg-zinc-50 border border-zinc-200 rounded focus:outline-none focus:border-black transition h-32"
                         placeholder="Detalles sobre el estado de la fachada..."></textarea>
                 </div>
@@ -702,6 +705,7 @@
             const tl = gsap.timeline();
             tl.from("h1", { y: 100, opacity: 0, duration: 1.5, ease: "power4.out" })
                 .to("#hero-sub", { opacity: 1, y: -10, duration: 1, ease: "power2.out" }, "-=0.8")
+                .to("#trust-badge", { opacity: 1, y: 0, duration: 0.8 }, "-=0.5")
                 .to(".hero-img", { scale: 1, duration: 3, ease: "power2.out" }, 0);
         };
 
@@ -757,17 +761,25 @@
         }
 
         // --- LÓGICA DE LA CALCULADORA ---
-        let currentUVA = 0;
+        let currentUVA = parseFloat(localStorage.getItem('cached_uva')) || 1867.20;
+        
+        function updateUVADisplay(val) {
+            document.getElementById('val-uva-hoy').innerText = val.toLocaleString('es-AR', {minimumFractionDigits: 2});
+        }
+        
+        updateUVADisplay(currentUVA);
+
         fetch('https://api.argentinadatos.com/v1/finanzas/indices/uva')
             .then(res => res.json())
             .then(data => {
-                currentUVA = data[data.length - 1].valor;
-                document.getElementById('val-uva-hoy').innerText = currentUVA.toLocaleString('es-AR', {minimumFractionDigits: 2});
+                const newVal = data[data.length - 1].valor;
+                if(newVal) {
+                    currentUVA = newVal;
+                    localStorage.setItem('cached_uva', currentUVA);
+                    updateUVADisplay(currentUVA);
+                }
             })
-            .catch(() => {
-                currentUVA = 1867.20;
-                document.getElementById('val-uva-hoy').innerText = currentUVA.toLocaleString('es-AR');
-            });
+            .catch(err => console.log("Usando UVA cacheado:", currentUVA));
 
         function addFrente() {
             const container = document.getElementById('frentes-container');
@@ -857,6 +869,18 @@
                 return;
             }
             const text = encodeURIComponent(`Hola, quisiera consultar sin cargo si mi edificio ubicado en ${addressInput} posee el certificado Ley 257 / 6116 al día y vigente.`);
+            window.open(`https://wa.me/5491137787305?text=${text}`, '_blank');
+        }
+
+        // Lógica para enviar formulario de contacto
+        function handleContactSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('contact-name').value;
+            const phone = document.getElementById('contact-phone').value;
+            const address = document.getElementById('contact-address').value;
+            const msg = document.getElementById('contact-msg').value;
+            
+            const text = encodeURIComponent(`Hola Ivan! Mi nombre es ${name}. Necesito una inspección para mi inmueble en ${address}. Teléfono: ${phone}. Consulta: ${msg}`);
             window.open(`https://wa.me/5491137787305?text=${text}`, '_blank');
         }
     </script>
