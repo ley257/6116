@@ -35,21 +35,35 @@
     {
       "@context": "https://schema.org",
       "@type": "ProfessionalService",
-      "name": "Ley 257 / 6116 - Certificación de Fachadas CABA",
-      "description": "Servicio profesional de certificación de fachadas en CABA bajo la Ley 257/6116. Inspección técnica, gestión del certificado de conservación ante la AGC y asesoría de obra.",
+      "name": "Ley 257 - Ley 6116 | Certificaciones de fachadas",
+      "description": "Certificación profesional de fachadas en CABA bajo la Ley 257/6116. Inspección técnica, gestión del certificado de conservación ante la AGC y asesoría de obra.",
       "url": "https://ley6116.com.ar",
       "telephone": "+5491137787305",
       "email": "",
       "address": {
         "@type": "PostalAddress",
-        "addressLocality": "Buenos Aires",
+        "streetAddress": "Salta 1954",
+        "postalCode": "C1137",
+        "addressLocality": "Ciudad Autónoma de Buenos Aires",
         "addressRegion": "CABA",
         "addressCountry": "AR"
       },
       "geo": {
         "@type": "GeoCoordinates",
-        "latitude": "-34.6037",
-        "longitude": "-58.3816"
+        "latitude": "-34.6276",
+        "longitude": "-58.3899"
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday"
+        ],
+        "opens": "08:00",
+        "closes": "20:00"
       },
       "areaServed": {
         "@type": "City",
@@ -589,7 +603,7 @@
             <a href="https://wa.me/5491137787305" class="text-lg font-bold hover:text-green-400 transition"
                 target="_blank">WhatsApp Directo: 11-3778-7305</a>
             <div class="h-px w-12 bg-zinc-700 hidden md:block"></div>
-            <p class="text-zinc-400">Buenos Aires, Argentina</p>
+            <p class="text-zinc-400">Salta 1954, CABA</p>
         </div>
     </footer>
 
@@ -793,25 +807,26 @@
             let cpau = 0, honorarios = 0, cat = "";
             
             // Definimos los topes de honorarios de cada categoría para asegurar el piso de la siguiente
-            const hT1Max = (currentUVA / 1.55) * 600;
-            const hT2Max = Math.max((currentUVA / 2.53) * 1200, hT1Max);
+            const hT1Max = (currentUVA / 1.40) * 600;
+            const hT2Max = Math.max((currentUVA / 2.10) * 1200, hT1Max);
 
             if (area <= 600) { 
-                cat = "T1"; cpau = 43000; honorarios = (currentUVA / 1.55) * area; 
+                cat = "T1"; cpau = 43000; honorarios = (currentUVA / 1.40) * area; 
             } else if (area <= 1200) { 
-                cat = "T2"; cpau = 55000; honorarios = Math.max((currentUVA / 2.53) * area, hT1Max); 
+                cat = "T2"; cpau = 55000; honorarios = Math.max((currentUVA / 2.10) * area, hT1Max); 
             } else { 
                 cat = "T3"; cpau = 127000; honorarios = Math.max((currentUVA / 2.33) * area, hT2Max); 
             }
 
             if (honorarios < 180000) honorarios = 180000;
+            honorarios = Math.round(honorarios);
             const total = cpau + honorarios;
 
             document.getElementById('final-dir').innerText = dir;
             document.getElementById('final-cat').innerText = cat;
             document.getElementById('final-cpau').innerText = `$ ${cpau.toLocaleString('es-AR')}`;
             document.getElementById('final-honorarios').innerText = `$ ${honorarios.toLocaleString('es-AR')}`;
-            document.getElementById('final-total').innerText = `$ ${Math.round(total).toLocaleString('es-AR')}`;
+            document.getElementById('final-total').innerText = `$ ${total.toLocaleString('es-AR')}`;
             
             const now = new Date();
             document.getElementById('final-fecha').innerText = `BA, ${now.getDate()}/${now.getMonth()+1}/${now.getFullYear()}`;
